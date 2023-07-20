@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Space M3u8 Player</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    /* CSS to make the input box big */
+    #urlInput {
+      font-size: 18px;
+      padding: 10px;
+      width: 80%;
+    }
+
+    /* CSS to hide the input box after playing the video */
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <input type="text" id="urlInput" placeholder="Enter M3U8 URL">
+    <button onclick="loadStream()">Load Stream</button>
+  </div>
+  <video id="videoPlayer" controls autoplay></video>
+  <div>
+    <label for="speedScroller">Playback Speed: </label>
+    <input type="range" id="speedScroller" min="0.5" max="2" step="0.1" value="1" onchange="changeSpeed(this.value)">
+    <span id="speedValue">1x</span>
+  </div>
+
+  <script>
+    var video = document.getElementById('videoPlayer');
+    var streamUrl = '';
+    var inputContainer = document.querySelector('div');
+
+    function loadStream() {
+      var urlInput = document.getElementById('urlInput');
+      streamUrl = urlInput.value;
+
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play();
+          inputContainer.classList.add('hidden'); // Hide the input box after playing video
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', function() {
+          video.play();
+          inputContainer.classList.add('hidden'); // Hide the input box after playing video
+        });
+      }
+    }
+
+    function changeSpeed(speed) {
+      video.playbackRate = speed;
+      var speedValue = document.getElementById('speedValue');
+      speedValue.textContent = speed + 'x';
+    }
+  </script>
+</body>
+</html>
