@@ -36,7 +36,7 @@ function playClick() {
 //Playing stream
 function playStream() {
     session.createStream({
-        name: "live_stream",
+        name: "mmss1122@",
         display: document.getElementById("myVideo"),
     }).play();
 }
