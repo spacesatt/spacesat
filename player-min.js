@@ -8,7 +8,7 @@ function init_api() {
     Flashphoner.init({});
     //Connect to WCS server over websockets
     session = Flashphoner.createSession({
-        urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
+        urlServer: "wss://11sport.live" //specify the address of your WCS
     }).on(SESSION_STATUS.ESTABLISHED, function(session) {
         console.log("ESTABLISHED");
     });
