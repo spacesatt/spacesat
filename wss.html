@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <script src="https://softvelum.com/player/releases/sldp-v2.25.0.min.js"></script>
+  </head>
+  <body>
+    <label for="streamInput">Enter Stream URL:</label>
+    <input type="text" id="streamInput">
+    <button onclick="initializePlayer()">Initialize Player</button>
+    <button onclick="removePlayer()">Remove Player</button>
+    <div id="player"></div>
+    <label for="speedInput">Set Playback Speed:</label>
+    <input type="number" step="0.1" min="0.1" max="2.0" id="speedInput" value="1.0">
+    <button onclick="setPlaybackSpeed()">Set Speed</button>
+
+    <script type="text/javascript">
+      var sldpPlayer;
+
+      function initializePlayer() {
+        var streamURL = document.getElementById('streamInput').value;
+        if (streamURL.trim() !== '') {
+          sldpPlayer = SLDP.init({
+            container: 'player',
+            stream_url: streamURL,
+            adaptive_bitrate: {
+              initial_rendition: '240p'
+            },
+            buffering: 500,
+            autoplay: false,
+            height: 480,
+            width: 424
+          });
+        } else {
+          alert('Please enter a valid Stream URL.');
+        }
+      }
+
+      function removePlayer() {
+        if (sldpPlayer) {
+          sldpPlayer.destroy(function () {
+            console.log('SLDP Player is destroyed.');
+          });
+        }
+      }
+
+      function setPlaybackSpeed() {
+        var speed = parseFloat(document.getElementById('speedInput').value);
+        if (sldpPlayer) {
+          sldpPlayer.setPlaybackRate(speed);
+        }
+      }
+    </script>
+  </body>
+</html>
