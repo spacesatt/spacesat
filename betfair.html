@@ -1,39 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>API Data Display</title>
+  <title>Test Page</title>
 </head>
 <body>
-  <div id="output"></div>
-
   <script>
-    const outputDiv = document.getElementById("output");
-    const apiURL = "http://172.104.179.219:4000/getmatches/4";
+    // Secure equivalent URL
+    const secureUrl = 'https://172.104.179.219:4000/getmatches/4';
 
-    fetch(apiURL)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
+    // Fetch data using the secure URL
+    fetch(secureUrl)
+      .then(response => response.json())
       .then(data => {
-        let outputHTML = "";
-
-        for (const item of data.data) {
-          const eventName = item.eventName;
-          const eventID = item.eventId;
-          const marketID = item.marketId;
-
-          if (eventName && eventID && marketID) {
-            outputHTML += `<p>Event Name: ${eventName}, Event ID: ${eventID}, Market ID: ${marketID}</p>`;
-          }
-        }
-
-        outputDiv.innerHTML = outputHTML;
+        // Handle the response data
+        console.log(data);
       })
       .catch(error => {
-        console.error("Error:", error);
+        // Handle errors
+        console.error('Error fetching data:', error);
       });
   </script>
 </body>
