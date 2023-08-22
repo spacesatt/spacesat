@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Data Display</title>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #header {
+      background-color: #333;
+      padding: 10px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    #output {
+      padding: 20px;
+    }
+    .event-card {
+      background-color: #333;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .event-name {
+      font-size: 1.2em;
+      margin: 0;
+      margin-bottom: 5px;
+    }
+    .event-details {
+      font-size: 0.9em;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1>API Data Display</h1>
+  </div>
+  <div id="output"></div>
+
+  <script>
+    const outputDiv = document.getElementById("output");
+    const apiURL = "http://172.104.179.219:4000/getmatches/4";
+
+    fetch(apiURL)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        let outputHTML = "";
+
+        for (const item of data.data) {
+          const eventName = item.eventName;
+          const eventID = item.eventId;
+          const marketID = item.marketId;
+          const eventDate = convertToIndianTime(item.eventDate); // Convert to Indian time
+
+          if (eventName && eventID && marketID && eventDate) {
+            outputHTML += `
+              <div class="event-card">
+                <p class="event-name">${eventName}</p>
+                <p class="event-details">Event ID: ${eventID}, Market ID: ${marketID}</p>
+                <p class="event-date">Event Date: ${eventDate}</p>
+              </div>
+            `;
+          }
+        }
+
+        outputDiv.innerHTML = outputHTML;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+
+    function convertToIndianTime(utcDateStr) {
+      const utcDate = new Date(utcDateStr);
+      const options = {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      };
+      return utcDate.toLocaleDateString("en-US", options);
+    }
+  </script>
+</body>
+</html>
