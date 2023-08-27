@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        width: 400px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #player {
+        margin-top: 20px;
+      }
+    </style>
+    <script src="https://softvelum.com/player/releases/sldp-v2.25.0.min.js" defer></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Spacesat Video Player</h1>
+      <label for="streamUrl">Enter Stream URL:</label>
+      <input type="text" id="streamUrl" placeholder="Enter stream URL">
+      <button onclick="initializePlayer()">Load Stream</button>
+      <button onclick="removePlayer()">Remove Player</button>
+      <div id="player"></div>
+    </div>
+
+    <script type="text/javascript">
+      let sldpPlayer;
+
+      function initializePlayer() {
+        const streamUrl = document.getElementById("streamUrl").value;
+
+        if (sldpPlayer) {
+          sldpPlayer.destroy(function () {
+            console.log('SLDP Player is destroyed.');
+            initPlayer(streamUrl);
+          });
+        } else {
+          initPlayer(streamUrl);
+        }
+      }
+
+      function initPlayer(streamUrl) {
+        sldpPlayer = SLDP.init({
+          container: 'player',
+          stream_url: streamUrl,
+          adaptive_bitrate: {
+            initial_rendition: '240p'
+          },
+          buffering: 500,
+          autoplay: false,
+          height: 360,
+          width: 640
+        });
+      }
+
+      function removePlayer() {
+        if (sldpPlayer) {
+          sldpPlayer.destroy(function () {
+            console.log('SLDP Player is destroyed.');
+            sldpPlayer = undefined;
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
